@@ -7,7 +7,7 @@ import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
 import Div from '@vkontakte/vkui/dist/components/Div/Div';
 import Avatar from '@vkontakte/vkui/dist/components/Avatar/Avatar';
 
-const Home = ({ id, go, fetchedUser }) => (
+const Home = ({ id, goForward, fetchedUser }) => (
 	<Panel id={id}>
 		<PanelHeader>Example</PanelHeader>
 		{fetchedUser &&
@@ -22,7 +22,7 @@ const Home = ({ id, go, fetchedUser }) => (
 
 		<Group title='Navigation Example'>
 			<Div>
-				<Button size='xl' level='2' onClick={go} data-to='persik'>
+				<Button size='xl' level='2' onClick={goForward} data-to='persik'>
 					Show me the Persik, please
 				</Button>
 			</Div>
