@@ -1,51 +1,84 @@
-import React, { useState, useEffect } from 'react';
-import bridge from '@vkontakte/vk-bridge';
-import View from '@vkontakte/vkui/dist/components/View/View';
+import React, { useState } from 'react';
 import ConfigProvider from '@vkontakte/vkui/dist/components/ConfigProvider/ConfigProvider';
-import ScreenSpinner from '@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner';
+import Epic from '@vkontakte/vkui/dist/components/Epic/Epic';
+import Tabbar from '@vkontakte/vkui/dist/components/Tabbar/Tabbar';
+import TabbarItem from '@vkontakte/vkui/dist/components/TabbarItem/TabbarItem';
+import Icon28GridSquareOutline from '@vkontakte/icons/dist/28/grid_square_outline';
+import Icon28StatisticsOutline from '@vkontakte/icons/dist/28/statistics_outline';
+import Icon28FireOutline from '@vkontakte/icons/dist/28/fire_outline';
+import Icon28Users3Outline from '@vkontakte/icons/dist/28/users_3_outline';
+import Icon28SettingsOutline from '@vkontakte/icons/dist/28/settings_outline';
 import '@vkontakte/vkui/dist/vkui.css';
 
-import Home from './panels/Home';
-import Persik from './panels/Persik';
-import Spotty from './panels/Spotty';
-import { useNavigation } from './hooks/useNavigation';
+import Topics from './views/Topics';
+import Rating from './views/Rating';
+import Achievements from './views/Achievements';
+import Friends from './views/Friends';
+import Settings from './views/Settings';
 
 const App = () => {
-	const [fetchedUser, setUser] = useState(null);
-	const [popout, setPopout] = useState(<ScreenSpinner size='large' />);
-	const { activePanel, history, goForward, goBack } = useNavigation('home')
-
-	useEffect(() => {
-		bridge.subscribe(({ detail: { type, data }}) => {
-			if (type === 'VKWebAppUpdateConfig') {
-				const schemeAttribute = document.createAttribute('scheme');
-				schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
-				document.body.attributes.setNamedItem(schemeAttribute);
-			}
-		});
-		async function fetchData() {
-			const user = await bridge.send('VKWebAppGetUserInfo');
-			setUser(user);
-			setPopout(null);
-		}
-		fetchData();
-	}, []);
+	const [activeStory, setActiveStory] = useState('topics');
+	
+	const onStoryChange = ({ currentTarget: { dataset: { story } }}) => {
+		setActiveStory(story)
+	};
 
 	return (
 		<ConfigProvider isWebView={true}>
-			<View
-				activePanel={activePanel}
-				popout={popout}
-				onSwipeBack={goBack}
-				history={history}
-			>
-				<Home id='home' fetchedUser={fetchedUser} goForward={goForward} />
-				<Persik id='persik' goBack={goBack} />
-				<Spotty id='spotty' goBack={goBack} />
-			</View>
+			<Epic activeStory={activeStory} tabbar={
+				<Tabbar>
+					<TabbarItem
+						onClick={onStoryChange}
+						selected={activeStory === 'topics'}
+						data-story='topics'
+						text='Темы'
+					>
+						<Icon28GridSquareOutline />
+					</TabbarItem>
+					<TabbarItem
+						onClick={onStoryChange}
+						selected={activeStory === 'rating'}
+						data-story='rating'
+						text='Рейтинг'
+					>
+						<Icon28StatisticsOutline />
+					</TabbarItem>
+					<TabbarItem
+						onClick={onStoryChange}
+						selected={activeStory === 'achievements'}
+						data-story='achievements'
+						label='3'
+						text='Достижения'
+					>
+						<Icon28FireOutline />
+					</TabbarItem>
+					<TabbarItem
+						onClick={onStoryChange}
+						selected={activeStory === 'friends'}
+						data-story='friends'
+						text='Друзья'
+					>
+						<Icon28Users3Outline />
+					</TabbarItem>
+					<TabbarItem
+						onClick={onStoryChange}
+						selected={activeStory === 'settings'}
+						data-story='settings'
+						text='Настройки'
+					>
+						<Icon28SettingsOutline />
+					</TabbarItem>
+				</Tabbar>
+			}>
+				<Topics id='topics' />
+				<Rating id='rating' />
+				<Achievements id='achievements' />
+				<Friends id='friends' />
+				<Settings id='settings' />
+			</Epic>
 		</ConfigProvider>
 	);
-}
+};
 
 export default App;
 
