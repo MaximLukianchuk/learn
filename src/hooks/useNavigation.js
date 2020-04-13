@@ -14,7 +14,7 @@ export const useNavigation = initialPanel => {
     }
     setHistory(hist);
     setActivePanel(panel);
-  }
+  };
   
   const goForward = ({ currentTarget: { dataset: { to } }}) => {
     const hist = [...history];
@@ -24,7 +24,7 @@ export const useNavigation = initialPanel => {
     }
     setHistory(hist);
     setActivePanel(to);
-  }
+  };
   
   return {
     activePanel,
@@ -32,4 +32,4 @@ export const useNavigation = initialPanel => {
     goForward,
     goBack
   }
-}
+};
