@@ -7,6 +7,7 @@ import '@vkontakte/vkui/dist/vkui.css';
 
 import Home from './panels/Home';
 import Persik from './panels/Persik';
+import Spotty from './panels/Spotty';
 import { useNavigation } from './hooks/useNavigation';
 
 const App = () => {
@@ -40,6 +41,7 @@ const App = () => {
 			>
 				<Home id='home' fetchedUser={fetchedUser} goForward={goForward} />
 				<Persik id='persik' goBack={goBack} />
+				<Spotty id='spotty' goBack={goBack} />
 			</View>
 		</ConfigProvider>
 	);
